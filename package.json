@@ -1,0 +1,11 @@
+{
+  "name": "sls-analyser",
+  "description": "",
+  "version": "0.1.0",
+  "dependencies": {},
+  "devDependencies": {
+    "serverless-offline": "^3.31.3",
+    "serverless-offline-python": "^3.21.3",
+    "serverless-python-requirements": "^4.2.5"
+  }
+}
