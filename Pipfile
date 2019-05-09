@@ -7,6 +7,7 @@ name = "pypi"
 nltk = "*"
 langdetect = "*"
 scikit-learn = "*"
+flair = "*"
 
 [dev-packages]
 

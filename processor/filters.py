@@ -5,29 +5,21 @@ from nltk.corpus import stopwords
 
 class StopWordsRemover():
 
-    def __init__(self, text, language):
+    def __init__(self, language):
         self.stopwords = set(stopwords.words(language))
-        self.text = text
 
-    def __call__(self):
-        return self.cleanup()
-
-    def cleanup(self):
-        return " ".join(word for word in self.text.split() \
-                       if word not in self.stopwords)
+    def cleanup(self, content):
+        return " ".join(word for word in content.split()
+                        if word not in self.stopwords)
 
 
 class UnwantedCharsRemover():
 
-    def __init__(self, text, language):
-        self.text = text
+    def __init__(self):
         self.unwanted_chars = '?.,!:;"$%^&*()#@+/<>=\\[]_~{}|`'
 
-    def __call__(self):
-        return self.cleanup()
-
-    def cleanup(self):
-        return self.text.translate({ord(c): None for c in self.unwanted_chars})
+    def cleanup(self, content):
+        return content.translate({ord(c): None for c in self.unwanted_chars})
 
 
 class RepeatCharsRemover():
@@ -38,11 +30,9 @@ class RepeatCharsRemover():
         self.text = text
         self.language = language
 
-    def __call__(self):
-        return self.cleanup()
-
     def cleanup(self):
-        return " ".join(self.replace_remover(word) for word in self.text.split())
+        return " ".join(self.replace_remover(word)
+                        for word in self.text.split())
 
     def replace_remover(self, word):
         if wordnet.synsets(word, lang=self.language):
@@ -54,20 +44,25 @@ class RepeatCharsRemover():
             return repl_word
 
 
-class FiltersPipeline(object):
-    def __init__(self, filters=None):
-        self._filters = list()
+class FiltersPipeline():
+    def __init__(self, language, filters=None):
+        self._filters_list = list()
         if filters is not None:
-            self._filters += filters
+            self._filters_list += filters
+        else:
+            self._filters_list = [
+                                  UnwantedCharsRemover,
+                                  StopWordsRemover(language),
+                                  RepeatCharsRemover(language)
+                                 ]
 
     def filter(self, content):
-        for filter in self._filters:
-            content = filter(content)
+        for _filter in self._filters:
+            content = _filter.cleanup(content)
         return content
 
 
 def filter_contents(content, language, filters_list=None):
-    if not filters_list:
-        filters_list = [UnwantedCharsRemover, StopWordsRemover, RepeatCharsRemover]
-    filter = FiltersPipeline(filters_list)
-    return filter.filter(content, language)
+    language = language if language else 'en'
+    filter_pipeline = FiltersPipeline(filters_list, language)
+    return filter_pipeline.filter(content)
