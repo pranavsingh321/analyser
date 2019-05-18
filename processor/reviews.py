@@ -1,4 +1,3 @@
-
 from __future__ import division
 
 import re
@@ -8,12 +7,6 @@ from six import string_types
 from nltk.corpus.reader.api import *
 from nltk.tokenize import *
 
-TITLE = re.compile(r'^\[t\](.*)$')  # [t] Title
-FEATURES = re.compile(
-    r'((?:(?:\w+\s)+)?\w+)\[((?:\+|\-)\d)\]'
-)  # find 'feature' in feature[+3]
-NOTES = re.compile(r'\[(?!t)(p|u|s|cc|cs)\]')  # find 'p' in camera[+2][p]
-SENT = re.compile(r'##(.*)$')  # find tokenized sentence
 
 
 #@compat.python_2_unicode_compatible
@@ -184,13 +177,6 @@ class ReviewsCorpusReader(CorpusReader):
         elif isinstance(fileids, string_types):
             fileids = [fileids]
         return concat([self.open(f).read() for f in fileids])
-
-
-    def readme(self):
-        """
-        Return the contents of the corpus README.txt file.
-        """
-        return self.open("README.txt").read()
 
 
     def reviews(self, fileids=None):
