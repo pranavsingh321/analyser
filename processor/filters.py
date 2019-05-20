@@ -112,5 +112,5 @@ class FiltersPipeline():
 
 def filter_contents(content, language, filters_list=None):
     language = language if language else 'en'
-    filter_pipeline = FiltersPipeline(filters_list, language)
+    filter_pipeline = FiltersPipeline(language, filters_list)
     return filter_pipeline.filter(content)
