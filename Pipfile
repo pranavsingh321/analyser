@@ -9,6 +9,13 @@ langdetect = "*"
 scikit-learn = "*"
 flair = "*"
 vadersentiment = "*"
+spacy = "*"
+spacy-nightly = "==2.1.0a13"
+stanfordnlp = "*"
+polyglot = "*"
+babel = "*"
+python-rake = "*"
+stanfornlp = "*"
 
 [dev-packages]
 
